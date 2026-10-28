@@ -1,0 +1,10 @@
+{
+  "C":  { "entries": [9, 10], "he": "תקשורת ומדעי המחשב", "en": "Communications & Computer Science", "whereHe": "ליד גן הפסלים", "whereEn": "Next to the Sculpture Garden" },
+  "A":  { "entries": [32], "he": "אריסון", "en": "Arison", "whereHe": "בין פסיכולוגיה לדשא", "whereEn": "Between Psychology and the lawn" },
+  "L":  { "entries": [31], "he": "לאודר", "en": "Lauder", "whereHe": "משמאל לאריסון", "whereEn": "Left of Arison" },
+  "E":  { "entries": [46], "he": "יזמות", "en": "Entrepreneurship", "whereHe": "בכניסה המזרחית", "whereEn": "At the east entrance" },
+  "PE": { "entries": [36], "he": "כלכלה ופסיכולוגיה", "en": "Economics & Psychology", "whereHe": "ליד הדגלים", "whereEn": "Next to the flags" },
+  "SL": { "entries": [34, 35], "he": "משפטים וקיימות", "en": "Law & Sustainability", "whereHe": "מערבית לדגלים", "whereEn": "West of the flags" },
+  "H":  { "entries": [41], "he": "האנגר", "en": "Hangar", "whereHe": "ליד האגודה", "whereEn": "Next to the Students Union" },
+  "S":  { "entries": [30], "he": "ספרייה", "en": "Library", "whereHe": "בכניסה המזרחית", "whereEn": "At the east entrance" }
+}

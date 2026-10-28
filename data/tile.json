@@ -1,0 +1,25 @@
+{
+ "rect": {
+  "x0": 0,
+  "y0": 0,
+  "x1": 3888,
+  "y1": 3791
+ },
+ "ground": {
+  "full": "assets/ground.png",
+  "half": "assets/ground-half.png"
+ },
+ "walk": {
+  "src": "assets/walkgrid.png",
+  "cell": 6,
+  "x0": 0,
+  "y0": 0,
+  "w": 648,
+  "h": 632,
+  "values": {
+   "blocked": 0,
+   "lawn": 120,
+   "pave": 240
+  }
+ }
+}

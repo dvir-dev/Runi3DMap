@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#00378b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Campus">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="מפת קמפוס תלת־ממדית אינטראקטיבית של אוניברסיטת רייכמן · Interactive 3D campus map of Reichman University">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="מפת הקמפוס · Campus Map — Reichman University">
+  <meta property="og:description" content="מפת קמפוס תלת־ממדית: חפשו מבנה, כיתה (למשל C.B01) וקבלו הדרכה בהליכה · Find a building or room and get walking directions">
+  <meta property="og:image" content="https://dvir-dev.github.io/Runi3DMap/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://dvir-dev.github.io/Runi3DMap/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <title>מפת הקמפוס · Campus Map</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app" data-layout="bottom">
+  <canvas id="gl" aria-label="3D campus map"></canvas>
+  <div id="pins" aria-hidden="true"></div>
+
+  <header id="bar">
+    <div class="brand"><img id="logo" src="assets/logo.png" alt="Reichman University" width="56" height="34" decoding="async"><div class="brand-text"><h1 id="title"></h1><p id="subtitle"></p></div></div>
+    <div class="bar-actions">
+      <button id="btn-lang" class="chip" type="button"></button>
+      <button id="btn-list" class="chip chip-accent" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.3"/><path d="M15.2 15.2L20 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span id="lbl-list"></span></button>
+    </div>
+  </header>
+
+  <nav id="tools">
+    <button id="btn-zin" type="button"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+    <button id="btn-zout" type="button"><svg viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+    <button id="btn-north" type="button"><svg id="compass" viewBox="0 0 24 24"><path d="M12 3l4 9h-8z" fill="#eb690b"/><path d="M12 21l-4-9h8z" fill="currentColor" opacity=".55"/></svg></button>
+    <button id="btn-rot-l" type="button"><svg viewBox="0 0 24 24"><path d="M7 7.5A8 8 0 1 1 4.5 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3.5 4.5v4.6h4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button id="btn-rot-r" type="button"><svg viewBox="0 0 24 24"><path d="M17 7.5A8 8 0 1 0 19.5 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 4.5v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button id="btn-tilt" type="button"><span id="tilt-txt">3D</span></button>
+    <button id="btn-students" type="button" hidden><svg viewBox="0 0 24 24"><circle cx="9" cy="7.5" r="2.6" fill="currentColor"/><path d="M4 19v-4.2c0-1.7 1.4-3 3-3h4c1.7 0 3 1.3 3 3V19" fill="currentColor"/><circle cx="17" cy="9" r="2.1" fill="currentColor" opacity=".6"/><path d="M15.5 19v-3.2c0-1.1.6-2 1.5-2.5.5-.3 1.1-.4 1.7-.4 1.4 0 2.8 1 2.8 2.7V19" fill="currentColor" opacity=".6"/></svg></button>
+    <button id="btn-gyro" type="button" hidden><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9c-1 2-1 4 0 6M21 9c1 2 1 4 0 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+    <button id="btn-codes" type="button" hidden><span id="codes-txt">ABC</span></button>
+    <button id="btn-home" type="button"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+  </nav>
+
+  <p id="hint"></p>
+  <div id="toast" role="status"></div>
+
+  <section id="sheet" aria-live="polite" hidden>
+    <div id="sheet-handle"><span></span></div>
+    <button id="sheet-close" type="button">×</button>
+    <div id="route" hidden></div>
+    <div id="cards"></div>
+  </section>
+
+  <aside id="index" hidden>
+    <div class="index-head">
+      <input id="q" type="search" autocomplete="off" enterkeyhint="search">
+      <button id="index-close" type="button">×</button>
+    </div>
+    <div id="chips" role="tablist"></div>
+    <ul id="list"></ul>
+    <p id="empty" hidden></p>
+  </aside>
+
+  <div id="ios-hint" role="note" hidden><p id="ios-hint-txt"></p><button id="ios-hint-close" type="button" aria-label="OK">×</button></div>
+
+  <div id="loader"><img src="assets/logo.png" alt="Reichman University" width="170" height="104"><div class="spin"></div><p id="loader-txt"></p></div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
